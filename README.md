@@ -1,58 +1,49 @@
-# Gym Warden PWA v0.1
+# Gym Warden PWA v0.2
 
-A no-subscription Overlord-lite workout accountability web app.
+A local-only iPhone-installable accountability PWA for flexible weekly weight-training adherence.
 
-## What it does
+## What changed in v0.2
 
-- Tracks required lifting days.
-- Requires start proof photo before a workout can begin.
-- Requires a timer, at least 3 checked movements, and end proof before completion.
-- Supports full session mode and emergency-save mode.
-- Logs valid exceptions separately from skipped workouts.
-- Calculates weekly adherence and accountability debt.
-- Generates accountability messages and weekly reports you can copy/share.
-- Stores data locally in your browser. Export/import is included for backup.
+- Removed fixed workout schedule.
+- Removed exercise checklist.
+- Removed workout names/movements.
+- Removed workout timer.
+- Removed Watch Mode language.
+- Added black cat with yellow eyes icon/mascot.
+- Default target is now 4 flexible weight-training days per week.
+- Default stake/debt is now $50 per missed workout.
+- Added week-over-week adherence trend.
+- Added health/sick week controls:
+  - reduce this week's target
+  - skip entire week
+  - clear adjustment
+- Added accountability contact field and SMS helper.
 
-## Default schedule
+## Important SMS limitation
 
-- Monday: Glutes
-- Tuesday: Shoulders & Triceps
-- Thursday: Glutes & Hamstrings
-- Saturday: Back & Rear Delts
+This static GitHub Pages version cannot automatically send SMS messages in the background. It can copy the accountability text and open Messages to the first saved phone number. You still paste/send manually.
 
-You can change the schedule in Settings.
+Automatic SMS requires a backend plus an SMS provider such as Twilio, Vonage, AWS SNS, etc.
 
-## Deploy with no MacBook
+## Deploy
 
-### Option A: Netlify drag-and-drop
+Upload all files to the root of the GitHub repository used by GitHub Pages.
 
-1. Unzip this folder.
-2. Go to Netlify.
-3. Drag the folder into Netlify's deploy area.
-4. Open the deployed URL on iPhone Safari.
-5. Share -> Add to Home Screen.
+Expected structure:
 
-### Option B: GitHub Pages
+```text
+index.html
+styles.css
+app.js
+manifest.webmanifest
+service-worker.js
+README.md
+icons/icon-192.png
+icons/icon-512.png
+```
 
-1. Create a new GitHub repo.
-2. Upload all files in this folder.
-3. Go to repo Settings -> Pages.
-4. Publish from the main branch/root.
-5. Open the Pages URL on iPhone Safari.
-6. Share -> Add to Home Screen.
+Then open the GitHub Pages URL on iPhone Safari and use Share → Add to Home Screen.
 
-### Option C: Cloudflare Pages
+## Privacy
 
-1. Create a Cloudflare Pages project.
-2. Upload this static folder directly or connect a GitHub repo.
-3. Open the deployed URL on iPhone Safari.
-4. Share -> Add to Home Screen.
-
-## Limitations
-
-- No native iOS app blocking.
-- No automatic SMS/calls.
-- No Apple HealthKit integration.
-- No cross-device sync unless you add a backend.
-
-This v0.1 is intentionally local-only and free to host.
+Data is stored in the browser local storage on the device where the app is used. The public GitHub repo contains only app code, not your workout logs or phone numbers.

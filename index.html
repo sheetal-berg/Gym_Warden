@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#151515" />
+  <meta name="theme-color" content="#080808" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Gym Warden" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -18,20 +18,31 @@
       <p class="eyebrow">Strict lift accountability</p>
       <h1>Gym Warden</h1>
     </div>
-    <div id="modePill" class="mode-pill">Loading</div>
+    <div id="statusPill" class="status-pill">Loading</div>
   </header>
 
   <main>
-    <section class="warden-card status-card">
-      <div class="warden-face" aria-hidden="true">
-        <div class="eyes"><span></span><span></span></div>
-        <div class="mouth"></div>
+    <section class="warden-card hero-card">
+      <div class="cat-face" aria-hidden="true">
+        <div class="cat-ear left"></div>
+        <div class="cat-ear right"></div>
+        <div class="cat-head">
+          <div class="cat-eye left"></div>
+          <div class="cat-eye right"></div>
+          <div class="cat-nose"></div>
+          <div class="cat-mouth"></div>
+          <div class="whiskers left"><span></span><span></span><span></span></div>
+          <div class="whiskers right"><span></span><span></span><span></span></div>
+        </div>
       </div>
-      <div class="status-copy">
-        <p class="eyebrow">Today</p>
-        <h2 id="todayTitle">Checking schedule…</h2>
-        <p id="wardenMessage" class="warden-message">The Warden is loading your rules.</p>
-        <div id="countdown" class="countdown"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">This week</p>
+        <h2 id="weekTitle">Loading weekly target…</h2>
+        <p id="wardenMessage" class="warden-message">The cat is checking your accountability rules.</p>
+        <div class="progress-wrap">
+          <div class="progress-bar"><span id="progressFill"></span></div>
+          <p id="weekMeta" class="muted"></p>
+        </div>
       </div>
     </section>
 
@@ -40,32 +51,31 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">Proof gate</p>
-            <h3>Start workout</h3>
+            <h3>Start proof</h3>
           </div>
           <button id="resetTodayBtn" class="ghost danger small">Reset today</button>
         </div>
-        <p class="muted">You cannot complete a lift with one tap. Start proof is required.</p>
+        <p class="muted">No fixed workout list. No timer. Just proof that you started a real weight-training day.</p>
         <label class="file-drop">
           <input id="startProof" type="file" accept="image/*" capture="environment" />
-          <span>Upload/take start proof photo</span>
+          <span>Upload / take start proof photo</span>
         </label>
-        <button id="startBtn" class="primary full">Submit start proof + start timer</button>
+        <button id="startBtn" class="primary full">Submit start proof</button>
         <div id="startPreview" class="preview"></div>
-        <div id="timer" class="timer">Timer: not started</div>
       </article>
 
       <article class="warden-card">
         <p class="eyebrow">Completion mode</p>
         <h3>Full or emergency</h3>
         <div class="toggle-row">
-          <label><input type="radio" name="mode" value="full" checked /> Full session</label>
+          <label><input type="radio" name="mode" value="full" checked /> Full weight-training day</label>
           <label><input type="radio" name="mode" value="emergency" /> Emergency save</label>
         </div>
-        <p id="modeHint" class="muted">Full session requires 35+ minutes and end proof. Emergency requires 20+ minutes and is marked as a save, not ideal.</p>
+        <p id="modeHint" class="muted">Full completion requires start proof and end proof. Emergency save requires proof plus a short note explaining why it was reduced.</p>
         <div class="stat-grid">
-          <div><strong id="weeklyRequired">4</strong><span>Required</span></div>
-          <div><strong id="weeklyDone">0</strong><span>Completed</span></div>
-          <div><strong id="weeklyMissed">0</strong><span>Missed</span></div>
+          <div><strong id="targetCount">4</strong><span>Target</span></div>
+          <div><strong id="completedCount">0</strong><span>Done</span></div>
+          <div><strong id="remainingCount">4</strong><span>Left</span></div>
           <div><strong id="debtTotal">$0</strong><span>Debt</span></div>
         </div>
       </article>
@@ -74,21 +84,20 @@
     <section class="warden-card">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Checklist</p>
-          <h3 id="checklistTitle">Today’s required movements</h3>
+          <p class="eyebrow">Finish gate</p>
+          <h3>Complete today’s weight-training day</h3>
         </div>
-        <span id="checklistCount" class="mini-pill">0 selected</span>
+        <span id="todayState" class="mini-pill">Not started</span>
       </div>
-      <div id="exerciseChecklist" class="checklist"></div>
-      <label class="file-drop top-gap">
+      <label class="file-drop">
         <input id="endProof" type="file" accept="image/*" capture="environment" />
-        <span>Upload/take end proof photo</span>
+        <span>Upload / take end proof photo</span>
       </label>
       <div id="endPreview" class="preview"></div>
-      <textarea id="notes" rows="3" placeholder="Energy / RPE / notes, e.g. 'exhausted but completed emergency version.'"></textarea>
+      <textarea id="notes" rows="3" placeholder="Optional for full day. Required for emergency save. Example: 'High work stress, completed reduced lift instead of skipping.'"></textarea>
       <div class="button-row">
-        <button id="completeBtn" class="primary">Complete workout</button>
-        <button id="exceptionBtn" class="secondary">Log valid exception</button>
+        <button id="completeBtn" class="primary">Complete</button>
+        <button id="exceptionBtn" class="secondary">Health / sick exception</button>
       </div>
       <p id="validationMessage" class="validation"></p>
     </section>
@@ -97,11 +106,12 @@
       <article class="warden-card">
         <p class="eyebrow">Escalation</p>
         <h3>Accountability message</h3>
-        <p class="muted">Generated when a session is missed or when you want to report completion to your coach/friend.</p>
-        <textarea id="accountabilityText" rows="7"></textarea>
+        <p class="muted">This does not auto-send. It copies the message and can open Messages/share sheet.</p>
+        <textarea id="accountabilityText" rows="8"></textarea>
         <div class="button-row">
           <button id="copyMessageBtn" class="secondary">Copy</button>
           <button id="shareMessageBtn" class="secondary">Share</button>
+          <button id="smsMessageBtn" class="secondary">Open SMS</button>
         </div>
       </article>
 
@@ -109,7 +119,10 @@
         <p class="eyebrow">Weekly report</p>
         <h3>This week</h3>
         <div id="weeklyReport" class="report"></div>
-        <button id="copyReportBtn" class="secondary full">Copy weekly report</button>
+        <div class="button-row">
+          <button id="copyReportBtn" class="secondary">Copy report</button>
+          <button id="shareReportBtn" class="secondary">Share report</button>
+        </div>
       </article>
     </section>
 
@@ -117,13 +130,12 @@
       <details>
         <summary>Settings</summary>
         <div class="settings-grid">
-          <label>Deadline <input id="deadlineInput" type="time" /></label>
-          <label>Warning time <input id="warningInput" type="time" /></label>
-          <label>Penalty per unexcused miss ($) <input id="penaltyInput" type="number" min="0" step="5" /></label>
+          <label>Weekly target<input id="targetInput" type="number" min="1" max="7" step="1" /></label>
+          <label>Stake / debt per missed workout ($)<input id="penaltyInput" type="number" min="0" step="5" /></label>
+          <label>Week starts<select id="weekStartInput"><option value="1">Monday</option><option value="0">Sunday</option></select></label>
+          <label>Accountability phone numbers<input id="contactsInput" type="text" placeholder="Optional, comma-separated" /></label>
         </div>
-        <h4>Training schedule</h4>
-        <p class="muted">Set which lift belongs to each day. Leave a day as Rest if it is not a required lift day.</p>
-        <div id="scheduleEditor" class="schedule-editor"></div>
+        <p class="muted">Phone numbers stay only in this browser. Do not hard-code them into GitHub.</p>
         <div class="button-row">
           <button id="saveSettingsBtn" class="primary">Save settings</button>
           <button id="exportBtn" class="secondary">Export data</button>
@@ -132,35 +144,33 @@
       </details>
     </section>
 
+    <section class="warden-card">
+      <details>
+        <summary>Health / sick week controls</summary>
+        <p class="muted">Use this only for illness, injury, severe period symptoms, or real recovery constraints. This changes the weekly target so sickness does not create fake failure debt.</p>
+        <div class="settings-grid">
+          <label>This week target override<input id="overrideTargetInput" type="number" min="0" max="7" step="1" placeholder="Leave blank for normal target" /></label>
+          <label>Reason<select id="overrideReasonInput"><option value="Illness">Illness</option><option value="Injury / pain warning">Injury / pain warning</option><option value="Severe period symptoms">Severe period symptoms</option><option value="Travel / logistics">Travel / logistics</option><option value="Coach-directed deload">Coach-directed deload</option></select></label>
+        </div>
+        <textarea id="overrideNoteInput" rows="3" placeholder="Optional note: fever, bad cramps, injury flare-up, etc."></textarea>
+        <div class="button-row">
+          <button id="saveOverrideBtn" class="primary">Save sick-week adjustment</button>
+          <button id="skipWeekBtn" class="secondary danger-soft">Skip entire week</button>
+          <button id="clearOverrideBtn" class="ghost">Clear adjustment</button>
+        </div>
+      </details>
+    </section>
+
     <section class="warden-card history-card">
       <p class="eyebrow">History</p>
-      <h3>Recent sessions</h3>
-      <div id="historyList" class="history-list"></div>
+      <h3>Week-over-week adherence trend</h3>
+      <div id="trendList" class="trend-list"></div>
     </section>
   </main>
 
   <footer>
-    <p>Local-only v0.1. Data is stored in this browser unless you export it.</p>
+    <p>Local-only v0.2. Data is stored in this browser unless you export it.</p>
   </footer>
-
-  <dialog id="exceptionDialog">
-    <form method="dialog" class="dialog-card">
-      <h3>Log valid exception</h3>
-      <p class="muted">Use this only for legitimate constraints, not normal fatigue or avoidance.</p>
-      <select id="exceptionReason">
-        <option value="Illness">Illness</option>
-        <option value="Injury/pain warning">Injury/pain warning</option>
-        <option value="Severe period symptoms">Severe period symptoms</option>
-        <option value="Unavoidable work emergency">Unavoidable work emergency</option>
-        <option value="Travel/logistical impossibility">Travel/logistical impossibility</option>
-      </select>
-      <textarea id="exceptionNote" rows="3" placeholder="One-line explanation"></textarea>
-      <div class="button-row right">
-        <button value="cancel" class="ghost">Cancel</button>
-        <button id="saveExceptionBtn" value="default" class="primary">Save exception</button>
-      </div>
-    </form>
-  </dialog>
 
   <script src="app.js"></script>
 </body>
