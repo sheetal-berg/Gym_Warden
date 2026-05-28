@@ -1,8 +1,8 @@
-# Gym Warden PWA v0.5
+# Gym Warden PWA v0.6
 
-A lightweight iPhone-installable PWA for tracking a flexible weekly weight-training target.
+A lightweight iPhone-installable PWA for tracking a flexible weekly weight-training target. v0.6 updates the in-app mascot and Home Screen icons to the black cat with yellow eyes.
 
-## v0.5 behavior
+## v0.6 behavior
 
 - Weekly target defaults to 4 weight-training days.
 - Week starts on Sunday by default.
@@ -25,6 +25,7 @@ Upload these files to the repository root:
 - README.md
 - icons/icon-192.png
 - icons/icon-512.png
+- icons/cat-mascot.png
 
 Then enable GitHub Pages from the repository root.
 

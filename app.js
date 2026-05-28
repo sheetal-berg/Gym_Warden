@@ -4,7 +4,7 @@
   const STORE_KEY = 'gymWarden.v05.state';
   const OLD_KEYS = ['gymWarden.v04.state', 'gymWarden.v03.state', 'gymWarden.v02.state', 'gymWarden.v01.state'];
   const DEFAULT_STATE = {
-    version: '0.5.0',
+    version: '0.6.0',
     settings: { weeklyTarget: 4, debtPerMiss: 100, weekStartsOn: 0 },
     logs: {},
     weekAdjustments: {},
@@ -95,7 +95,7 @@
 
   function mergeState(input) {
     const next = clone(DEFAULT_STATE);
-    next.version = '0.5.0';
+    next.version = '0.6.0';
     next.settings = {
       weeklyTarget: Number(input?.settings?.weeklyTarget ?? input?.settings?.target ?? next.settings.weeklyTarget),
       debtPerMiss: Number(input?.settings?.debtPerMiss ?? input?.settings?.penalty ?? next.settings.debtPerMiss),
@@ -405,7 +405,7 @@
   function exportData() {
     const exportState = clone(state);
     exportState.meta.lastExportAt = Date.now();
-    exportState.version = '0.5.0';
+    exportState.version = '0.6.0';
     const blob = new Blob([JSON.stringify(exportState, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
