@@ -48,35 +48,27 @@
 
     <section class="grid two-col">
       <article class="warden-card">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Proof gate</p>
-            <h3>Start proof</h3>
-          </div>
-          <button id="resetTodayBtn" class="ghost danger small">Reset today</button>
-        </div>
-        <p class="muted">No fixed workout list. No timer. Just proof that you started a real weight-training day.</p>
-        <label class="file-drop">
-          <input id="startProof" type="file" accept="image/*" capture="environment" />
-          <span>Upload / take start proof photo</span>
+        <p class="eyebrow">Single accountability gate</p>
+        <h3>Log a completed weight-training day</h3>
+        <p class="muted">No start proof, no finish gate, no timer, no fixed workout list. Pick the date, choose proof type, and submit once.</p>
+        <label>Workout date
+          <input id="workoutDateInput" type="date" />
         </label>
-        <button id="startBtn" class="primary full">Submit start proof</button>
-        <div id="startPreview" class="preview"></div>
+        <div class="toggle-row compact">
+          <label><input type="radio" name="mode" value="full" checked /> Full workout</label>
+          <label><input type="radio" name="mode" value="emergency" /> Emergency save</label>
+        </div>
+        <p id="modeHint" class="muted">Full counts normally. Emergency save counts toward adherence but is labeled separately.</p>
       </article>
 
       <article class="warden-card">
-        <p class="eyebrow">Completion mode</p>
-        <h3>Full or emergency</h3>
-        <div class="toggle-row">
-          <label><input type="radio" name="mode" value="full" checked /> Full weight-training day</label>
-          <label><input type="radio" name="mode" value="emergency" /> Emergency save</label>
-        </div>
-        <p id="modeHint" class="muted">Full completion requires start proof and end proof. Emergency save requires proof plus a short note explaining why it was reduced.</p>
-        <div class="stat-grid">
-          <div><strong id="targetCount">4</strong><span>Target</span></div>
-          <div><strong id="completedCount">0</strong><span>Done</span></div>
-          <div><strong id="remainingCount">4</strong><span>Left</span></div>
-          <div><strong id="debtTotal">$0</strong><span>Debt</span></div>
+        <p class="eyebrow">Proof type</p>
+        <h3>What evidence do you have?</h3>
+        <div class="proof-options">
+          <label><input type="radio" name="proofType" value="gymPhoto" checked /> Gym/equipment photo</label>
+          <label><input type="radio" name="proofType" value="appleHealth" /> Apple Health / Fitness screenshot or minutes</label>
+          <label><input type="radio" name="proofType" value="workoutApp" /> Workout app screenshot</label>
+          <label><input type="radio" name="proofType" value="manual" /> No photo — manual attestation</label>
         </div>
       </article>
     </section>
@@ -84,22 +76,35 @@
     <section class="warden-card">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Finish gate</p>
-          <h3>Complete today’s weight-training day</h3>
+          <p class="eyebrow">Completion proof</p>
+          <h3>Submit one proof record</h3>
         </div>
-        <span id="todayState" class="mini-pill">Not started</span>
+        <button id="resetSelectedDateBtn" class="ghost danger small">Reset selected date</button>
+      </div>
+      <div class="warning-box">
+        <strong>Critical limitation:</strong> this static web app does not auto-validate photos. If you upload a couch photo, the app cannot know. Proof is for human audit/accountability, not computer vision verification.
       </div>
       <label class="file-drop">
-        <input id="endProof" type="file" accept="image/*" capture="environment" />
-        <span>Upload / take end proof photo</span>
+        <input id="proofFile" type="file" accept="image/*" capture="environment" />
+        <span>Upload / take proof photo or screenshot</span>
       </label>
-      <div id="endPreview" class="preview"></div>
-      <textarea id="notes" rows="3" placeholder="Optional for full day. Required for emergency save. Example: 'High work stress, completed reduced lift instead of skipping.'"></textarea>
+      <div id="proofPreview" class="preview"></div>
+      <label>Apple Health / exercise minutes, optional
+        <input id="exerciseMinutesInput" type="number" min="0" step="1" placeholder="Example: 54" />
+      </label>
+      <textarea id="notes" rows="4" placeholder="Optional for full workout with proof. Required for emergency save or manual/no-photo proof. Example: 'Completed lift yesterday. Apple Fitness shows 52 exercise minutes, but I did not take a gym photo.'"></textarea>
       <div class="button-row">
-        <button id="completeBtn" class="primary">Complete</button>
-        <button id="exceptionBtn" class="secondary">Health / sick exception</button>
+        <button id="logWorkoutBtn" class="primary">Log completed workout</button>
+        <button id="healthExceptionBtn" class="secondary">Health / sick adjustment</button>
       </div>
       <p id="validationMessage" class="validation"></p>
+    </section>
+
+    <section class="grid four-col stats-grid">
+      <article class="warden-card stat-card"><strong id="targetCount">4</strong><span>Weekly target</span></article>
+      <article class="warden-card stat-card"><strong id="completedCount">0</strong><span>Completed</span></article>
+      <article class="warden-card stat-card"><strong id="remainingCount">4</strong><span>Remaining</span></article>
+      <article class="warden-card stat-card"><strong id="potentialDebt">$400</strong><span>Potential current-week debt</span></article>
     </section>
 
     <section class="grid two-col">
@@ -126,28 +131,16 @@
       </article>
     </section>
 
-    <section class="warden-card">
-      <details>
-        <summary>Settings</summary>
-        <div class="settings-grid">
-          <label>Weekly target<input id="targetInput" type="number" min="1" max="7" step="1" /></label>
-          <label>Stake / debt per missed workout ($)<input id="penaltyInput" type="number" min="0" step="5" /></label>
-          <label>Week starts<select id="weekStartInput"><option value="1">Monday</option><option value="0">Sunday</option></select></label>
-          <label>Accountability phone numbers<input id="contactsInput" type="text" placeholder="Optional, comma-separated" /></label>
-        </div>
-        <p class="muted">Phone numbers stay only in this browser. Do not hard-code them into GitHub.</p>
-        <div class="button-row">
-          <button id="saveSettingsBtn" class="primary">Save settings</button>
-          <button id="exportBtn" class="secondary">Export data</button>
-          <label class="import-label secondary">Import data<input id="importInput" type="file" accept="application/json" /></label>
-        </div>
-      </details>
+    <section class="warden-card history-card">
+      <p class="eyebrow">History</p>
+      <h3>Week-over-week adherence trend</h3>
+      <div id="trendList" class="trend-list"></div>
     </section>
 
     <section class="warden-card">
       <details>
         <summary>Health / sick week controls</summary>
-        <p class="muted">Use this only for illness, injury, severe period symptoms, or real recovery constraints. This changes the weekly target so sickness does not create fake failure debt.</p>
+        <p class="muted">Use this only for illness, injury, severe period symptoms, travel/logistics, or coach-directed deload. This changes the weekly target so sickness does not create fake failure debt.</p>
         <div class="settings-grid">
           <label>This week target override<input id="overrideTargetInput" type="number" min="0" max="7" step="1" placeholder="Leave blank for normal target" /></label>
           <label>Reason<select id="overrideReasonInput"><option value="Illness">Illness</option><option value="Injury / pain warning">Injury / pain warning</option><option value="Severe period symptoms">Severe period symptoms</option><option value="Travel / logistics">Travel / logistics</option><option value="Coach-directed deload">Coach-directed deload</option></select></label>
@@ -161,15 +154,27 @@
       </details>
     </section>
 
-    <section class="warden-card history-card">
-      <p class="eyebrow">History</p>
-      <h3>Week-over-week adherence trend</h3>
-      <div id="trendList" class="trend-list"></div>
+    <section class="warden-card">
+      <details>
+        <summary>Settings</summary>
+        <div class="settings-grid">
+          <label>Weekly target<input id="targetInput" type="number" min="1" max="7" step="1" /></label>
+          <label>Debt per missed workout ($)<input id="penaltyInput" type="number" min="0" step="5" /></label>
+          <label>Week starts<select id="weekStartInput"><option value="0">Sunday</option><option value="1">Monday</option></select></label>
+          <label>Accountability phone numbers<input id="contactsInput" type="text" placeholder="Optional, comma-separated" /></label>
+        </div>
+        <p class="muted">Phone numbers stay only in this browser. Do not hard-code them into GitHub.</p>
+        <div class="button-row">
+          <button id="saveSettingsBtn" class="primary">Save settings</button>
+          <button id="exportBtn" class="secondary">Export data</button>
+          <label class="import-label secondary">Import data<input id="importInput" type="file" accept="application/json" /></label>
+        </div>
+      </details>
     </section>
   </main>
 
   <footer>
-    <p>Local-only v0.2. Data is stored in this browser unless you export it.</p>
+    <p>Local-only v0.3. Data is stored in this browser unless you export it.</p>
   </footer>
 
   <script src="app.js"></script>

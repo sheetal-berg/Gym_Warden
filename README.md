@@ -1,35 +1,32 @@
-# Gym Warden PWA v0.2
+# Gym Warden PWA v0.3
 
-A local-only iPhone-installable accountability PWA for flexible weekly weight-training adherence.
+Strict, flexible weekly weight-training accountability app.
 
-## What changed in v0.2
+## v0.3 changes
 
-- Removed fixed workout schedule.
-- Removed exercise checklist.
-- Removed workout names/movements.
-- Removed workout timer.
-- Removed Watch Mode language.
-- Added black cat with yellow eyes icon/mascot.
-- Default target is now 4 flexible weight-training days per week.
-- Default stake/debt is now $50 per missed workout.
-- Added week-over-week adherence trend.
-- Added health/sick week controls:
-  - reduce this week's target
-  - skip entire week
-  - clear adjustment
-- Added accountability contact field and SMS helper.
+- Removed start proof + finish gate.
+- Removed timer.
+- Removed fixed workout list / workout schedule.
+- Uses one action: **Log completed workout**.
+- Week starts on Sunday by default.
+- Default target: 4 completed weight-training days per week.
+- Default debt: $100 per missed workout.
+- Fixed debt bug so old/past weeks are not retroactively counted.
+- Added backfill logging by date for workouts already completed this week.
+- Added proof types:
+  - gym/equipment photo
+  - Apple Health / Fitness screenshot or exercise minutes
+  - workout app screenshot
+  - manual/no-photo attestation
+- Makes validation limits explicit: the app does not auto-validate photos.
+- Keeps health/sick week controls.
+- Keeps weekly adherence trend.
 
-## Important SMS limitation
+## Deployment
 
-This static GitHub Pages version cannot automatically send SMS messages in the background. It can copy the accountability text and open Messages to the first saved phone number. You still paste/send manually.
+Upload the files in this folder to the root of the GitHub repo, replacing the existing files.
 
-Automatic SMS requires a backend plus an SMS provider such as Twilio, Vonage, AWS SNS, etc.
-
-## Deploy
-
-Upload all files to the root of the GitHub repository used by GitHub Pages.
-
-Expected structure:
+Required structure:
 
 ```text
 index.html
@@ -42,8 +39,8 @@ icons/icon-192.png
 icons/icon-512.png
 ```
 
-Then open the GitHub Pages URL on iPhone Safari and use Share → Add to Home Screen.
+Then wait for GitHub Pages to refresh. If the old app persists on iPhone, delete the Home Screen icon, clear Safari website data for the site, then re-add the app from Safari.
 
 ## Privacy
 
-Data is stored in the browser local storage on the device where the app is used. The public GitHub repo contains only app code, not your workout logs or phone numbers.
+All data is stored locally in the browser by default. Phone numbers and proof images are not committed to GitHub.
