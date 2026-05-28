@@ -3,179 +3,169 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#080808" />
+  <meta name="theme-color" content="#F7EEDB" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Gym Warden" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>Gym Warden</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
 </head>
 <body>
-  <header class="app-header">
-    <div>
-      <p class="eyebrow">Strict lift accountability</p>
-      <h1>Gym Warden</h1>
-    </div>
-    <div id="statusPill" class="status-pill">Loading</div>
-  </header>
-
-  <main>
-    <section class="warden-card hero-card">
-      <div class="cat-face" aria-hidden="true">
-        <div class="cat-ear left"></div>
-        <div class="cat-ear right"></div>
-        <div class="cat-head">
-          <div class="cat-eye left"></div>
-          <div class="cat-eye right"></div>
-          <div class="cat-nose"></div>
-          <div class="cat-mouth"></div>
-          <div class="whiskers left"><span></span><span></span><span></span></div>
-          <div class="whiskers right"><span></span><span></span><span></span></div>
-        </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Gym Warden</p>
+        <h1>Cozy accountability</h1>
       </div>
-      <div class="hero-copy">
-        <p class="eyebrow">This week</p>
-        <h2 id="weekTitle">Loading weekly target…</h2>
-        <p id="wardenMessage" class="warden-message">The cat is checking your accountability rules.</p>
-        <div class="progress-wrap">
-          <div class="progress-bar"><span id="progressFill"></span></div>
-          <p id="weekMeta" class="muted"></p>
-        </div>
-      </div>
-    </section>
+      <button id="settingsBtn" class="icon-button" type="button" aria-label="Open settings">⚙️</button>
+    </header>
 
-    <section class="grid two-col">
-      <article class="warden-card">
-        <p class="eyebrow">Single accountability gate</p>
-        <h3>Log a completed weight-training day</h3>
-        <p class="muted">No start proof, no finish gate, no timer, no fixed workout list. Pick the date, choose proof type, and submit once.</p>
-        <label>Workout date
-          <input id="workoutDateInput" type="date" />
-        </label>
-        <div class="toggle-row compact">
-          <label><input type="radio" name="mode" value="full" checked /> Full workout</label>
-          <label><input type="radio" name="mode" value="emergency" /> Emergency save</label>
+    <main>
+      <section class="hero-card card">
+        <div class="hero-copy">
+          <p id="weekRange" class="eyebrow">This week</p>
+          <h2 id="progressTitle">0 of 4 done</h2>
+          <p id="progressSubtitle" class="subcopy">Log weight-training days as you complete them.</p>
+          <div id="weekDots" class="dot-row" aria-label="Weekly progress"></div>
         </div>
-        <p id="modeHint" class="muted">Full counts normally. Emergency save counts toward adherence but is labeled separately.</p>
-      </article>
-
-      <article class="warden-card">
-        <p class="eyebrow">Proof type</p>
-        <h3>What evidence do you have?</h3>
-        <div class="proof-options">
-          <label><input type="radio" name="proofType" value="gymPhoto" checked /> Gym/equipment photo</label>
-          <label><input type="radio" name="proofType" value="appleHealth" /> Apple Health / Fitness screenshot or minutes</label>
-          <label><input type="radio" name="proofType" value="workoutApp" /> Workout app screenshot</label>
-          <label><input type="radio" name="proofType" value="manual" /> No photo — manual attestation</label>
+        <div class="cat-badge" aria-hidden="true">
+          <div class="cat-ears"><span></span><span></span></div>
+          <div class="cat-face">
+            <span class="eye left"></span>
+            <span class="eye right"></span>
+            <span class="nose"></span>
+            <span class="smile"></span>
+            <span class="whiskers left"></span>
+            <span class="whiskers right"></span>
+          </div>
         </div>
-      </article>
-    </section>
+      </section>
 
-    <section class="warden-card">
-      <div class="section-heading">
+      <section class="tax-card card">
         <div>
-          <p class="eyebrow">Completion proof</p>
-          <h3>Submit one proof record</h3>
+          <p class="eyebrow">Cat tax at risk</p>
+          <h3 id="taxRisk">$400</h3>
         </div>
-        <button id="resetSelectedDateBtn" class="ghost danger small">Reset selected date</button>
-      </div>
-      <div class="warning-box">
-        <strong>Critical limitation:</strong> this static web app does not auto-validate photos. If you upload a couch photo, the app cannot know. Proof is for human audit/accountability, not computer vision verification.
-      </div>
-      <label class="file-drop">
-        <input id="proofFile" type="file" accept="image/*" capture="environment" />
-        <span>Upload / take proof photo or screenshot</span>
-      </label>
-      <div id="proofPreview" class="preview"></div>
-      <label>Apple Health / exercise minutes, optional
-        <input id="exerciseMinutesInput" type="number" min="0" step="1" placeholder="Example: 54" />
-      </label>
-      <textarea id="notes" rows="4" placeholder="Optional for full workout with proof. Required for emergency save or manual/no-photo proof. Example: 'Completed lift yesterday. Apple Fitness shows 52 exercise minutes, but I did not take a gym photo.'"></textarea>
-      <div class="button-row">
-        <button id="logWorkoutBtn" class="primary">Log completed workout</button>
-        <button id="healthExceptionBtn" class="secondary">Health / sick adjustment</button>
-      </div>
-      <p id="validationMessage" class="validation"></p>
-    </section>
+        <p id="taxText" class="tax-text">Each missed workout adds $100.</p>
+      </section>
 
-    <section class="grid four-col stats-grid">
-      <article class="warden-card stat-card"><strong id="targetCount">4</strong><span>Weekly target</span></article>
-      <article class="warden-card stat-card"><strong id="completedCount">0</strong><span>Completed</span></article>
-      <article class="warden-card stat-card"><strong id="remainingCount">4</strong><span>Remaining</span></article>
-      <article class="warden-card stat-card"><strong id="potentialDebt">$400</strong><span>Potential current-week debt</span></article>
-    </section>
+      <section class="card action-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Log workout</p>
+            <h3>Completed a lift?</h3>
+          </div>
+          <span id="selectedDateBadge" class="mini-pill">Today</span>
+        </div>
 
-    <section class="grid two-col">
-      <article class="warden-card">
-        <p class="eyebrow">Escalation</p>
-        <h3>Accountability message</h3>
-        <p class="muted">This does not auto-send. It copies the message and can open Messages/share sheet.</p>
-        <textarea id="accountabilityText" rows="8"></textarea>
+        <label class="field-label" for="workoutDate">Workout date</label>
+        <input id="workoutDate" class="field" type="date" />
+
+        <div class="segmented" role="group" aria-label="Completion type">
+          <label><input type="radio" name="completionMode" value="full" checked><span>Full</span></label>
+          <label><input type="radio" name="completionMode" value="emergency"><span>Emergency</span></label>
+        </div>
+
+        <p class="field-label">Proof type</p>
+        <div class="proof-grid" role="group" aria-label="Proof type">
+          <label><input type="radio" name="proofType" value="photo" checked><span>Photo / screenshot</span></label>
+          <label><input type="radio" name="proofType" value="health"><span>Apple Health minutes</span></label>
+          <label><input type="radio" name="proofType" value="manual"><span>Manual</span></label>
+        </div>
+
+        <div id="fileArea" class="file-area">
+          <label class="file-drop" for="proofFile">
+            <input id="proofFile" type="file" accept="image/*" />
+            <span id="fileDropText">Add proof image</span>
+          </label>
+          <div id="proofPreview" class="proof-preview" hidden></div>
+        </div>
+
+        <label id="minutesLabel" class="field-label" for="exerciseMinutes">Exercise minutes</label>
+        <input id="exerciseMinutes" class="field" type="number" min="0" step="1" placeholder="Example: 52" />
+
+        <label class="field-label" for="evidenceNote">Evidence note</label>
+        <textarea id="evidenceNote" class="field" rows="3" placeholder="Optional note. Required for manual logs."></textarea>
+
         <div class="button-row">
-          <button id="copyMessageBtn" class="secondary">Copy</button>
-          <button id="shareMessageBtn" class="secondary">Share</button>
-          <button id="smsMessageBtn" class="secondary">Open SMS</button>
+          <button id="logWorkoutBtn" class="primary-button" type="button">Log completed workout</button>
+          <button id="clearDateBtn" class="secondary-button" type="button">Clear selected date</button>
         </div>
-      </article>
+        <p id="formMessage" class="form-message" role="status"></p>
+      </section>
 
-      <article class="warden-card">
-        <p class="eyebrow">Weekly report</p>
-        <h3>This week</h3>
-        <div id="weeklyReport" class="report"></div>
-        <div class="button-row">
-          <button id="copyReportBtn" class="secondary">Copy report</button>
-          <button id="shareReportBtn" class="secondary">Share report</button>
+      <section class="card recovery-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Recovery controls</p>
+            <h3>Sick or injured?</h3>
+          </div>
         </div>
-      </article>
-    </section>
+        <p class="subcopy">Use this only when the week genuinely needs adjustment.</p>
+        <div class="recovery-actions">
+          <button id="reduceTargetBtn" class="secondary-button" type="button">Reduce target</button>
+          <button id="skipWeekBtn" class="secondary-button warm" type="button">Skip week</button>
+          <button id="clearRecoveryBtn" class="text-button" type="button">Clear</button>
+        </div>
+        <div id="targetOverridePanel" class="override-panel" hidden>
+          <label class="field-label" for="targetOverride">This week target</label>
+          <input id="targetOverride" class="field" type="number" min="0" max="7" step="1" placeholder="Example: 2" />
+          <label class="field-label" for="overrideReason">Reason</label>
+          <input id="overrideReason" class="field" type="text" placeholder="Illness, injury, severe period symptoms, travel..." />
+          <button id="saveOverrideBtn" class="primary-button small" type="button">Save adjustment</button>
+        </div>
+        <p id="recoveryMessage" class="form-message"></p>
+      </section>
 
-    <section class="warden-card history-card">
-      <p class="eyebrow">History</p>
-      <h3>Week-over-week adherence trend</h3>
-      <div id="trendList" class="trend-list"></div>
-    </section>
+      <section class="card trend-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">History</p>
+            <h3>Week-over-week</h3>
+          </div>
+          <span id="historyCount" class="mini-pill">0 weeks</span>
+        </div>
+        <div id="trendList" class="trend-list"></div>
+      </section>
 
-    <section class="warden-card">
-      <details>
-        <summary>Health / sick week controls</summary>
-        <p class="muted">Use this only for illness, injury, severe period symptoms, travel/logistics, or coach-directed deload. This changes the weekly target so sickness does not create fake failure debt.</p>
+      <section id="settingsPanel" class="card settings-card" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Settings</p>
+            <h3>Local setup</h3>
+          </div>
+          <button id="closeSettingsBtn" class="icon-button" type="button" aria-label="Close settings">✕</button>
+        </div>
         <div class="settings-grid">
-          <label>This week target override<input id="overrideTargetInput" type="number" min="0" max="7" step="1" placeholder="Leave blank for normal target" /></label>
-          <label>Reason<select id="overrideReasonInput"><option value="Illness">Illness</option><option value="Injury / pain warning">Injury / pain warning</option><option value="Severe period symptoms">Severe period symptoms</option><option value="Travel / logistics">Travel / logistics</option><option value="Coach-directed deload">Coach-directed deload</option></select></label>
+          <label>
+            <span class="field-label">Weekly target</span>
+            <input id="weeklyTarget" class="field" type="number" min="1" max="7" step="1" />
+          </label>
+          <label>
+            <span class="field-label">Debt per missed workout</span>
+            <input id="debtPerMiss" class="field" type="number" min="0" step="5" />
+          </label>
+          <label>
+            <span class="field-label">Week starts</span>
+            <select id="weekStartsOn" class="field">
+              <option value="0">Sunday</option>
+              <option value="1">Monday</option>
+            </select>
+          </label>
         </div>
-        <textarea id="overrideNoteInput" rows="3" placeholder="Optional note: fever, bad cramps, injury flare-up, etc."></textarea>
-        <div class="button-row">
-          <button id="saveOverrideBtn" class="primary">Save sick-week adjustment</button>
-          <button id="skipWeekBtn" class="secondary danger-soft">Skip entire week</button>
-          <button id="clearOverrideBtn" class="ghost">Clear adjustment</button>
+        <div class="button-row wrap">
+          <button id="saveSettingsBtn" class="primary-button" type="button">Save settings</button>
+          <button id="exportBtn" class="secondary-button" type="button">Export backup</button>
+          <label class="secondary-button import-button" for="importFile">Import backup<input id="importFile" type="file" accept="application/json" /></label>
         </div>
-      </details>
-    </section>
+        <p class="subcopy">Backup contains workout counts, dates, settings, and notes only. Images are not saved.</p>
+      </section>
+    </main>
 
-    <section class="warden-card">
-      <details>
-        <summary>Settings</summary>
-        <div class="settings-grid">
-          <label>Weekly target<input id="targetInput" type="number" min="1" max="7" step="1" /></label>
-          <label>Debt per missed workout ($)<input id="penaltyInput" type="number" min="0" step="5" /></label>
-          <label>Week starts<select id="weekStartInput"><option value="0">Sunday</option><option value="1">Monday</option></select></label>
-          <label>Accountability phone numbers<input id="contactsInput" type="text" placeholder="Optional, comma-separated" /></label>
-        </div>
-        <p class="muted">Phone numbers stay only in this browser. Do not hard-code them into GitHub.</p>
-        <div class="button-row">
-          <button id="saveSettingsBtn" class="primary">Save settings</button>
-          <button id="exportBtn" class="secondary">Export data</button>
-          <label class="import-label secondary">Import data<input id="importInput" type="file" accept="application/json" /></label>
-        </div>
-      </details>
-    </section>
-  </main>
-
-  <footer>
-    <p>Local-only v0.3. Data is stored in this browser unless you export it.</p>
-  </footer>
+    <footer class="footer-note">v0.5 · Local workout history only · No photo storage</footer>
+  </div>
 
   <script src="app.js"></script>
 </body>
