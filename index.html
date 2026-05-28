@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#151515" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Gym Warden" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Gym Warden</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Strict lift accountability</p>
+      <h1>Gym Warden</h1>
+    </div>
+    <div id="modePill" class="mode-pill">Loading</div>
+  </header>
+
+  <main>
+    <section class="warden-card status-card">
+      <div class="warden-face" aria-hidden="true">
+        <div class="eyes"><span></span><span></span></div>
+        <div class="mouth"></div>
+      </div>
+      <div class="status-copy">
+        <p class="eyebrow">Today</p>
+        <h2 id="todayTitle">Checking schedule…</h2>
+        <p id="wardenMessage" class="warden-message">The Warden is loading your rules.</p>
+        <div id="countdown" class="countdown"></div>
+      </div>
+    </section>
+
+    <section class="grid two-col">
+      <article class="warden-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Proof gate</p>
+            <h3>Start workout</h3>
+          </div>
+          <button id="resetTodayBtn" class="ghost danger small">Reset today</button>
+        </div>
+        <p class="muted">You cannot complete a lift with one tap. Start proof is required.</p>
+        <label class="file-drop">
+          <input id="startProof" type="file" accept="image/*" capture="environment" />
+          <span>Upload/take start proof photo</span>
+        </label>
+        <button id="startBtn" class="primary full">Submit start proof + start timer</button>
+        <div id="startPreview" class="preview"></div>
+        <div id="timer" class="timer">Timer: not started</div>
+      </article>
+
+      <article class="warden-card">
+        <p class="eyebrow">Completion mode</p>
+        <h3>Full or emergency</h3>
+        <div class="toggle-row">
+          <label><input type="radio" name="mode" value="full" checked /> Full session</label>
+          <label><input type="radio" name="mode" value="emergency" /> Emergency save</label>
+        </div>
+        <p id="modeHint" class="muted">Full session requires 35+ minutes and end proof. Emergency requires 20+ minutes and is marked as a save, not ideal.</p>
+        <div class="stat-grid">
+          <div><strong id="weeklyRequired">4</strong><span>Required</span></div>
+          <div><strong id="weeklyDone">0</strong><span>Completed</span></div>
+          <div><strong id="weeklyMissed">0</strong><span>Missed</span></div>
+          <div><strong id="debtTotal">$0</strong><span>Debt</span></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="warden-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Checklist</p>
+          <h3 id="checklistTitle">Today’s required movements</h3>
+        </div>
+        <span id="checklistCount" class="mini-pill">0 selected</span>
+      </div>
+      <div id="exerciseChecklist" class="checklist"></div>
+      <label class="file-drop top-gap">
+        <input id="endProof" type="file" accept="image/*" capture="environment" />
+        <span>Upload/take end proof photo</span>
+      </label>
+      <div id="endPreview" class="preview"></div>
+      <textarea id="notes" rows="3" placeholder="Energy / RPE / notes, e.g. 'exhausted but completed emergency version.'"></textarea>
+      <div class="button-row">
+        <button id="completeBtn" class="primary">Complete workout</button>
+        <button id="exceptionBtn" class="secondary">Log valid exception</button>
+      </div>
+      <p id="validationMessage" class="validation"></p>
+    </section>
+
+    <section class="grid two-col">
+      <article class="warden-card">
+        <p class="eyebrow">Escalation</p>
+        <h3>Accountability message</h3>
+        <p class="muted">Generated when a session is missed or when you want to report completion to your coach/friend.</p>
+        <textarea id="accountabilityText" rows="7"></textarea>
+        <div class="button-row">
+          <button id="copyMessageBtn" class="secondary">Copy</button>
+          <button id="shareMessageBtn" class="secondary">Share</button>
+        </div>
+      </article>
+
+      <article class="warden-card">
+        <p class="eyebrow">Weekly report</p>
+        <h3>This week</h3>
+        <div id="weeklyReport" class="report"></div>
+        <button id="copyReportBtn" class="secondary full">Copy weekly report</button>
+      </article>
+    </section>
+
+    <section class="warden-card">
+      <details>
+        <summary>Settings</summary>
+        <div class="settings-grid">
+          <label>Deadline <input id="deadlineInput" type="time" /></label>
+          <label>Warning time <input id="warningInput" type="time" /></label>
+          <label>Penalty per unexcused miss ($) <input id="penaltyInput" type="number" min="0" step="5" /></label>
+        </div>
+        <h4>Training schedule</h4>
+        <p class="muted">Set which lift belongs to each day. Leave a day as Rest if it is not a required lift day.</p>
+        <div id="scheduleEditor" class="schedule-editor"></div>
+        <div class="button-row">
+          <button id="saveSettingsBtn" class="primary">Save settings</button>
+          <button id="exportBtn" class="secondary">Export data</button>
+          <label class="import-label secondary">Import data<input id="importInput" type="file" accept="application/json" /></label>
+        </div>
+      </details>
+    </section>
+
+    <section class="warden-card history-card">
+      <p class="eyebrow">History</p>
+      <h3>Recent sessions</h3>
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Local-only v0.1. Data is stored in this browser unless you export it.</p>
+  </footer>
+
+  <dialog id="exceptionDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>Log valid exception</h3>
+      <p class="muted">Use this only for legitimate constraints, not normal fatigue or avoidance.</p>
+      <select id="exceptionReason">
+        <option value="Illness">Illness</option>
+        <option value="Injury/pain warning">Injury/pain warning</option>
+        <option value="Severe period symptoms">Severe period symptoms</option>
+        <option value="Unavoidable work emergency">Unavoidable work emergency</option>
+        <option value="Travel/logistical impossibility">Travel/logistical impossibility</option>
+      </select>
+      <textarea id="exceptionNote" rows="3" placeholder="One-line explanation"></textarea>
+      <div class="button-row right">
+        <button value="cancel" class="ghost">Cancel</button>
+        <button id="saveExceptionBtn" value="default" class="primary">Save exception</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
